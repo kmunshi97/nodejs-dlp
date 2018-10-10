@@ -26,6 +26,8 @@ const cmd = 'node inspect.js';
 const cwd = path.join(__dirname, `..`);
 const bucket = `nodejs-docs-samples-dlp`;
 const dataProject = `nodejs-docs-samples`;
+const PROJECT_ID =
+  process.env.GCLOUD_PROJECT || process.env.GOOGLE_CLOUD_PROJECT;
 
 test.before(tools.checkCredentials);
 
@@ -50,10 +52,9 @@ test.after.always(async () => {
   await subscription.delete().then(() => topic.delete());
 });
 
-// inspect_string
-test(`should inspect a string`, async t => {
+test(`dlp_inspect_string`, async t => {
   const output = await tools.runAsync(
-    `${cmd} string "I'm Gary and my email is gary@example.com"`,
+    `node dlp_inspect_string.js ${PROJECT_ID} "I'm Gary and my email is gary@example.com"`,
     cwd
   );
   t.regex(output, /Info type: EMAIL_ADDRESS/);
@@ -72,15 +73,20 @@ test(`should report string inspection handling errors`, async t => {
   t.regex(output, /Error in inspectString/);
 });
 
-// inspect_file
-test(`should inspect a local text file`, async t => {
-  const output = await tools.runAsync(`${cmd} file resources/test.txt`, cwd);
+test(`dlp_inspect_text_file`, async t => {
+  const output = await tools.runAsync(
+    `node dlp_inspect_text_file.js ${PROJECT_ID} resources/test.txt`,
+    cwd
+  );
   t.regex(output, /Info type: PHONE_NUMBER/);
   t.regex(output, /Info type: EMAIL_ADDRESS/);
 });
 
-test(`should inspect a local image file`, async t => {
-  const output = await tools.runAsync(`${cmd} file resources/test.png`, cwd);
+test(`dlp_inspect_image_file`, async t => {
+  const output = await tools.runAsync(
+    `node dlp_inspect_image_file.js ${PROJECT_ID} resources/test.png`,
+    cwd
+  );
   t.regex(output, /Info type: EMAIL_ADDRESS/);
 });
 
