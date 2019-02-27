@@ -22,13 +22,6 @@ const DLP = require('@google-cloud/dlp');
 // Import other required libraries
 const fs = require('fs');
 
-/**
- * Inspects the specified image file.
- *
- * @param projectId {string} Your Google Cloud Project ID.
- * @param filepath {string} The path to the image file to inspect.
- * @returns {object} The InspectContentResponse.
- */
 export async function inspectImageFile(
   projectId = 'YOUR_PROJECT_ID',
   filepath = 'path/to/image.png'
