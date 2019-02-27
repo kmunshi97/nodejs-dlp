@@ -29,7 +29,7 @@ const fs = require('fs');
  * @param filepath {string} The path to the image file to inspect.
  * @returns {object} The InspectContentResponse.
  */
-async function main(
+export async function inspectImageFile(
   projectId = 'YOUR_PROJECT_ID',
   filepath = 'path/to/image.png'
 ) {
@@ -73,4 +73,6 @@ async function main(
 }
 // [END dlp_inspect_image_file]
 
-main(...process.argv.slice(2));
+if (require.main === module) {
+  inspectImageFile(...process.argv.slice(2)).catch(console.error);
+}
